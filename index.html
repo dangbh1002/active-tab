@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Demo</title>
+</head>
+<body>
+
+<h1>Countdown</h1>
+<p id="countDown">60</p>
+
+<script>
+    const el = document.querySelector('#countDown');
+    let isActiveWindow = true;
+    let isActiveTab = true;
+
+    // CHECK ACTIVE WINDOW
+    window.onfocus = function () {
+        isActiveWindow = true;
+    };
+    window.onblur = function () {
+        isActiveWindow = false;
+        console.log('pause window');
+    };
+
+    // CHECK ACTIVE TAB
+    const pausedInternal = setInterval(() => {
+        if (!document.hidden) {
+            isActiveTab = true;
+        } else {
+            isActiveTab = false;
+            console.log('pause tab');
+        }
+    }, 1000);
+
+    // COUNT DOWN
+    const countDownInterval = setInterval(() => {
+        const value = Number(el.innerHTML);
+        if(value > 0 && isActiveWindow && isActiveTab) {
+            el.innerHTML = String(value - 1);
+            console.log('tick', value);
+        } else if (value === 0) {
+            clearInterval(countDownInterval);
+            clearInterval(pausedInternal);
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
